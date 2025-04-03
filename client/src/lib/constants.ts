@@ -65,44 +65,51 @@ export const DEV_OBJECTS = {
 export const PROJECTS = [
   {
     id: "project1",
-    title: "E-Commerce Platform",
-    description: "A full-featured e-commerce platform with user authentication, product search, cart management, and payment processing.",
-    technologies: ["React", "Node.js", "MongoDB"],
+    title: "AI-Powered Tools",
+    description: "Developed innovative AI-powered tools at ZyraTech that improved customer engagement by 40% and streamlined business processes.",
+    technologies: ["AI/ML", "Web Development", "User Experience Design"],
     image: "/textures/asphalt.png"
   },
   {
     id: "project2",
-    title: "Portfolio Dashboard",
-    description: "Interactive dashboard for financial portfolio analysis with data visualization and real-time updates.",
-    technologies: ["D3.js", "React", "Firebase"],
+    title: "Fintech Project Management",
+    description: "Led fintech projects at Money Forward, reducing operational bottlenecks and improving project delivery speed by 20%.",
+    technologies: ["Project Management", "Fintech", "Agile Methodologies"],
     image: "/textures/wood.jpg"
   },
   {
     id: "project3",
-    title: "Mobile Weather App",
-    description: "Weather forecast application with location-based services and 7-day forecasts.",
-    technologies: ["React Native", "OpenWeather API"],
+    title: "Career Empowerment Programs",
+    description: "Launched comprehensive career assistance programs at ZyraTech, helping professionals advance their careers in tech.",
+    technologies: ["Career Development", "Education", "Mentorship"],
     image: "/textures/sky.png"
+  },
+  {
+    id: "project4",
+    title: "Team Scaling Initiative",
+    description: "Successfully scaled ZyraTech from startup to an 11+ member team in just 6 months, establishing effective organizational structures.",
+    technologies: ["Team Building", "Leadership", "Business Development"],
+    image: "/textures/wood.jpg"
   }
 ];
 
 // Skills categorization
 export const SKILLS = [
   {
-    category: "Frontend",
-    items: ["React", "Vue.js", "Angular", "CSS/SASS", "TypeScript"]
+    category: "Development & AI",
+    items: ["Full Stack Development", "AI-Powered Solutions", "Machine Learning", "React.js", "Technical Project Leadership"]
   },
   {
-    category: "Backend",
-    items: ["Node.js", "Express", "Python", "Django", "PostgreSQL", "MongoDB"]
+    category: "Leadership",
+    items: ["Strategic Vision", "Team Management", "Project Planning", "Resource Management", "Product Lifecycle Management"]
   },
   {
-    category: "DevOps",
-    items: ["Docker", "Kubernetes", "CI/CD", "AWS", "Azure"]
+    category: "Technologies",
+    items: ["AI/ML", "Web Development", "Fintech Solutions", "Project Management Tools", "Agile Methodologies"]
   },
   {
     category: "Other",
-    items: ["Git", "Agile", "TDD", "UI/UX Design", "Performance Optimization"]
+    items: ["Digital Marketing", "Analytics", "UI/UX Design", "Business Scaling", "Customer Experience Enhancement"]
   }
 ];
 
@@ -110,30 +117,39 @@ export const SKILLS = [
 export const EXPERIENCE = [
   {
     id: "exp1",
-    title: "Senior Frontend Developer",
-    company: "Tech Innovations Inc.",
-    duration: "2021 - Present",
-    description: "Leading the frontend team in developing modern web applications using React, TypeScript, and GraphQL.",
-    technologies: ["React", "TypeScript", "GraphQL", "Next.js"],
+    title: "CEO",
+    company: "ZyraTech",
+    duration: "September 2024 - Present",
+    description: "Led the strategic vision and growth of ZyraTech, positioning it as a key player in the tech industry. Spearheaded the development and deployment of innovative web and AI solutions.",
+    technologies: ["AI", "Web Development", "Team Leadership", "Product Management"],
     color: "#4a6baf"
   },
   {
     id: "exp2",
-    title: "Full Stack Developer",
-    company: "Digital Solutions LLC",
-    duration: "2018 - 2021",
-    description: "Built responsive web applications and RESTful APIs for clients across various industries.",
-    technologies: ["Vue.js", "Node.js", "MongoDB", "Docker"],
+    title: "Project Manager Team Lead",
+    company: "Money Forward",
+    duration: "April 2024 - October 2024",
+    description: "Led a cross-functional team of developers to deliver high-priority projects in the fintech sector. Boosted project delivery efficiency by 20% through optimized workflows.",
+    technologies: ["Project Management", "Fintech", "Agile Methodologies"],
     color: "#56a980"
   },
   {
     id: "exp3",
-    title: "Junior Developer",
-    company: "WebCraft Studios",
-    duration: "2016 - 2018",
-    description: "Developed and maintained websites for small to medium businesses, focusing on UI/UX best practices.",
-    technologies: ["JavaScript", "PHP", "MySQL", "HTML/CSS"],
+    title: "Full-stack Developer",
+    company: "FlyLab Solutions Private Limited",
+    duration: "May 2023 - May 2024",
+    description: "Developed full-stack solutions collaborating with cross-functional teams. Focused on iterative development and continuous improvement.",
+    technologies: ["Full-stack Development", "Web Applications", "Collaborative Development"],
     color: "#a94e66"
+  },
+  {
+    id: "exp4",
+    title: "React.js Intern",
+    company: "STSARC",
+    duration: "May 2022 - May 2023",
+    description: "Gained practical experience in React.js development at Sahajananda Tech Services And Research Center.",
+    technologies: ["React.js", "Frontend Development", "Web Applications"],
+    color: "#6a8cb3"
   }
 ];
 
@@ -141,29 +157,29 @@ export const EXPERIENCE = [
 export const EDUCATION = [
   {
     id: "edu1",
-    degree: "Master of Computer Science",
-    institution: "Tech University",
-    duration: "2014 - 2016",
-    description: "Specialized in software engineering and web technologies.",
-    achievements: ["Graduated with honors", "Thesis on scalable web architectures"],
+    degree: "Bachelor of Engineering - BE, Computer Engineering",
+    institution: "Sandip Institute of Technology, & Research Centre",
+    duration: "May 2021 - July 2024",
+    description: "Comprehensive computer engineering education with focus on software development and AI.",
+    achievements: ["Software Engineer certification", "Introduction to Generative AI certification"],
     color: "#5d4a9e"
   },
   {
     id: "edu2",
-    degree: "Bachelor of Science in Computer Science",
-    institution: "State University",
-    duration: "2010 - 2014",
-    description: "Foundational studies in programming, data structures, and algorithms.",
-    achievements: ["Dean's List", "Student Developer Club President"],
+    degree: "Machine Learning Certification",
+    institution: "Online Learning Platform",
+    duration: "2023",
+    description: "In-depth study of machine learning algorithms and applications.",
+    achievements: ["Machine Learning certification", "Practical ML implementations"],
     color: "#8e6a30"
   },
   {
     id: "edu3",
-    degree: "Web Development Bootcamp",
-    institution: "Coding Academy",
-    duration: "2014",
-    description: "Intensive training in modern web development practices and frameworks.",
-    achievements: ["Final project recognized as Best UI/UX"],
+    degree: "Digital Marketing Certifications",
+    institution: "Google",
+    duration: "2022",
+    description: "Specialized training in digital marketing and analytics.",
+    achievements: ["Campaign Manager 360 Certification", "Google Analytics Certification"],
     color: "#37877a"
   }
 ];
@@ -200,27 +216,35 @@ export const GALLERY_ITEMS = [
 export const BLOG_POSTS = [
   {
     id: "post1",
-    title: "Building Immersive Web Experiences with Three.js",
-    date: "May 15, 2023",
-    excerpt: "How to create immersive 3D websites that engage users and stand out from traditional designs.",
-    category: "3D Web",
+    title: "The Rise of AI in Business Applications",
+    date: "March 20, 2024",
+    excerpt: "How AI-powered tools are transforming business operations and customer engagement strategies in 2024.",
+    category: "AI & Business",
     color: "#4c6ef5"
   },
   {
     id: "post2",
-    title: "Optimizing Performance in React Applications",
-    date: "April 3, 2023",
-    excerpt: "Practical techniques to improve the performance of your React applications.",
-    category: "React",
+    title: "Scaling Your Tech Startup: Lessons from ZyraTech",
+    date: "February 15, 2024",
+    excerpt: "Key insights and strategies for growing your tech startup from zero to a productive team in under 6 months.",
+    category: "Startup Growth",
     color: "#40c057"
   },
   {
     id: "post3",
-    title: "The Future of Web Development: WebGPU and Beyond",
-    date: "March 12, 2023",
-    excerpt: "Exploring upcoming web technologies that will revolutionize web development.",
-    category: "Future Tech",
+    title: "The Intersection of Fintech and AI",
+    date: "January 10, 2024",
+    excerpt: "Exploring how artificial intelligence is revolutionizing financial technology and creating new opportunities.",
+    category: "Fintech",
     color: "#be4bdb"
+  },
+  {
+    id: "post4",
+    title: "Career Advancement in the AI Era",
+    date: "December 5, 2023",
+    excerpt: "Navigating career growth in technology fields as AI continues to reshape job roles and skill requirements.",
+    category: "Career Development",
+    color: "#fa5252"
   }
 ];
 
@@ -230,24 +254,24 @@ export const CONTACT_METHODS = [
     id: "email", 
     label: "Email", 
     icon: "✉️", 
-    value: "contact@example.com" 
+    value: "abhijitdengale2003@gmail.com" 
   },
   { 
-    id: "github", 
-    label: "GitHub", 
-    icon: "🐙", 
-    value: "github.com/username" 
+    id: "phone", 
+    label: "Phone", 
+    icon: "📱", 
+    value: "9370162316" 
   },
   { 
     id: "linkedin", 
     label: "LinkedIn", 
     icon: "🔗", 
-    value: "linkedin.com/in/username" 
+    value: "www.linkedin.com/in/abhijitdengale" 
   },
   { 
-    id: "twitter", 
-    label: "Twitter", 
-    icon: "🐦", 
-    value: "twitter.com/username" 
+    id: "website", 
+    label: "Website", 
+    icon: "🌐", 
+    value: "abhijit01.netlify.app" 
   }
 ];

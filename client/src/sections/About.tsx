@@ -30,7 +30,7 @@ export default function About({ isActive, onShowInfo }: AboutProps) {
       position: { x: -10, y: 1, z: -5 },
       radius: 3,
       title: "About Me",
-      content: "Experienced software developer with a passion for creating innovative web applications. Specializing in frontend development with modern JavaScript frameworks while also having strong backend skills."
+      content: "I thrive at the intersection of technology and innovation, transforming complex ideas into impactful, real-world solutions. As the CEO of ZyraTech, I lead a dynamic team in pioneering AI-driven applications, web development, and career empowerment programs. With expertise in AI, machine learning, and full-stack development, my journey spans leadership roles across fintech and technology firms, where I have spearheaded high-impact projects that boost efficiency, scale businesses, and enhance customer experiences."
     });
   }, []);
   
@@ -101,7 +101,7 @@ export default function About({ isActive, onShowInfo }: AboutProps) {
         position={[0, 1.5, 0]} 
         scale={[0.1, 0.1, 0.1]} // Start small, will animate to full size
         castShadow
-        onClick={() => onShowInfo("About Me", "Experienced software developer with a passion for creating innovative web applications. Specializing in frontend development with modern JavaScript frameworks while also having strong backend skills.")}
+        onClick={() => onShowInfo("About Me", "I thrive at the intersection of technology and innovation, transforming complex ideas into impactful, real-world solutions. As the CEO of ZyraTech, I lead a dynamic team in pioneering AI-driven applications, web development, and career empowerment programs. With expertise in AI, machine learning, and full-stack development, my journey spans leadership roles across fintech and technology firms, where I have spearheaded high-impact projects that boost efficiency, scale businesses, and enhance customer experiences.")}
       >
         <sphereGeometry args={[1.5, 32, 32]} />
         <meshStandardMaterial
@@ -123,7 +123,7 @@ export default function About({ isActive, onShowInfo }: AboutProps) {
       </mesh>
       
       {/* Display cards with info */}
-      {["Frontend", "Backend", "DevOps"].map((skill, index) => {
+      {["AI/ML", "Full Stack", "Leadership"].map((skill, index) => {
         const angle = (index - 1) * Math.PI / 3;
         const distance = 3;
         const x = Math.sin(angle) * distance;
