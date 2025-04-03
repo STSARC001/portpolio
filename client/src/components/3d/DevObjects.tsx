@@ -3,7 +3,7 @@ import { useFrame, useLoader } from "@react-three/fiber";
 import { useGLTF, Text, useTexture } from "@react-three/drei";
 import * as THREE from "three";
 import { gsap } from "gsap";
-import { usePortfolio } from "@/lib/stores/usePortfolio";
+import { usePortfolio } from "../../lib/stores/usePortfolio";
 
 interface DevObjectsProps {
   activeSection: string;

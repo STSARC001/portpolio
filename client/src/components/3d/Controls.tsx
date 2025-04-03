@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useKeyboardControls } from "@react-three/drei";
 import * as THREE from "three";
-import { usePortfolio } from "@/lib/stores/usePortfolio";
+import { usePortfolio } from "../../lib/stores/usePortfolio";
 
 // Controls component handles user movement through the 3D space
 export default function Controls() {

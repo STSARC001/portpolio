@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { useThree, useFrame } from "@react-three/fiber";
 import { PerspectiveCamera } from "@react-three/drei";
 import * as THREE from "three";
-import { usePortfolio } from "@/lib/stores/usePortfolio";
+import { usePortfolio } from "../../lib/stores/usePortfolio";
 
 interface CameraProps {
   activeSection: string;
