@@ -3,20 +3,33 @@ import { cn } from "@/lib/utils";
 
 interface LoadingScreenProps {
   onStart: () => void;
+  errorMsg?: string | null;
 }
 
-export default function LoadingScreen({ onStart }: LoadingScreenProps) {
+export default function LoadingScreen({ onStart, errorMsg = null }: LoadingScreenProps) {
   const [progress, setProgress] = useState(0);
   const [isReady, setIsReady] = useState(false);
+  const [hasAttemptedToStart, setHasAttemptedToStart] = useState(false);
   
+  // Reset the loading state if we get an error
   useEffect(() => {
-    // Simulate loading progress
+    if (errorMsg) {
+      setProgress(100);
+      setIsReady(true);
+    }
+  }, [errorMsg]);
+  
+  // Simulate loading progress
+  useEffect(() => {
+    console.log("LoadingScreen mounted");
+    
     const interval = setInterval(() => {
       setProgress(prev => {
         const nextProgress = prev + (100 - prev) / 10;
         
         if (nextProgress > 99) {
           clearInterval(interval);
+          console.log("Loading complete");
           setTimeout(() => {
             setIsReady(true);
           }, 500);
@@ -27,8 +40,30 @@ export default function LoadingScreen({ onStart }: LoadingScreenProps) {
       });
     }, 200);
     
+    // Check if WebGL is supported
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    
+    if (!gl) {
+      console.error("WebGL not supported");
+      clearInterval(interval);
+      setProgress(100);
+      setIsReady(true);
+    }
+    
     return () => clearInterval(interval);
   }, []);
+  
+  const handleStart = () => {
+    console.log("Start button clicked");
+    setHasAttemptedToStart(true);
+    onStart();
+  };
+  
+  const forceRestart = () => {
+    console.log("Force restart requested");
+    window.location.reload();
+  };
 
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center bg-black z-50">
@@ -41,6 +76,15 @@ export default function LoadingScreen({ onStart }: LoadingScreenProps) {
         </p>
       </div>
       
+      {/* Error message if present */}
+      {errorMsg && (
+        <div className="mb-6 p-4 bg-red-900/70 rounded-lg text-white max-w-md text-center">
+          <h3 className="font-bold mb-2">Error Loading</h3>
+          <p className="text-sm mb-3">{errorMsg}</p>
+          <p className="text-xs mb-2">This may be due to WebGL compatibility issues or low device memory.</p>
+        </div>
+      )}
+      
       {!isReady ? (
         <div className="w-64 bg-gray-800 rounded-full h-4 mb-8 overflow-hidden">
           <div 
@@ -49,17 +93,29 @@ export default function LoadingScreen({ onStart }: LoadingScreenProps) {
           />
         </div>
       ) : (
-        <button
-          onClick={onStart}
-          className="px-8 py-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-full font-medium transition-colors mt-4 flex items-center space-x-2"
-        >
-          <span>Start Exploring</span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="m12 16 4-4-4-4"/><path d="M8 12h8"/></svg>
-        </button>
+        <div className="flex flex-col items-center space-y-3">
+          <button
+            onClick={handleStart}
+            className="px-8 py-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-full font-medium transition-colors flex items-center space-x-2"
+          >
+            <span>Start Exploring</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="m12 16 4-4-4-4"/><path d="M8 12h8"/></svg>
+          </button>
+          
+          {(errorMsg || hasAttemptedToStart) && (
+            <button
+              onClick={forceRestart}
+              className="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-full font-medium transition-colors flex items-center space-x-2 text-sm"
+            >
+              <span>Restart Application</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            </button>
+          )}
+        </div>
       )}
       
       <div className={cn(
-        "grid grid-cols-3 gap-8 mt-12 max-w-3xl opacity-0 transition-opacity duration-700",
+        "grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 mt-12 max-w-3xl opacity-0 transition-opacity duration-700",
         isReady && "opacity-100"
       )}>
         {[
@@ -75,8 +131,9 @@ export default function LoadingScreen({ onStart }: LoadingScreenProps) {
         ))}
       </div>
       
-      <div className="fixed bottom-4 text-gray-500 text-sm">
-        Press ESC to exit fullscreen • Best experienced with headphones
+      <div className="fixed bottom-4 text-gray-500 text-sm text-center">
+        <p>Press ESC to exit fullscreen • Best experienced with headphones</p>
+        <p className="mt-1 text-xs">If the 3D environment doesn't load, try using Chrome or Edge browser</p>
       </div>
     </div>
   );

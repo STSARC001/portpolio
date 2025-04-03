@@ -15,13 +15,34 @@ export default function Controls() {
   const velocity = useRef(new THREE.Vector3());
   const isGrounded = useRef(true);
   
-  // Get movement controls
+  // Get movement controls with subscription
+  const [subscribeKeys, getKeys] = useKeyboardControls();
+  
+  // These will trigger re-renders when they change (use for UI purposes)
   const forward = useKeyboardControls(state => state.forward);
   const backward = useKeyboardControls(state => state.backward);
   const leftward = useKeyboardControls(state => state.leftward);
   const rightward = useKeyboardControls(state => state.rightward);
   const jump = useKeyboardControls(state => state.jump);
   const interact = useKeyboardControls(state => state.interact);
+  
+  // Log when controls are initialized
+  useEffect(() => {
+    console.log("Controls component initialized");
+    console.log("Initial key states:", { forward, backward, leftward, rightward, jump, interact });
+    
+    // Subscribe to key changes for debugging
+    const unsubscribeForward = subscribeKeys(
+      state => state.forward,
+      pressed => {
+        console.log("Forward key state changed:", pressed);
+      }
+    );
+    
+    return () => {
+      unsubscribeForward();
+    };
+  }, []);
   
   // Get position and setter from global state
   const playerPosition = usePortfolio(state => state.playerPosition);
@@ -40,16 +61,31 @@ export default function Controls() {
   useFrame((state, delta) => {
     if (!characterRef.current) return;
     
+    // Get latest key state directly (more reliable than reactive state)
+    const keys = getKeys();
+    
     // Movement direction
     const direction = new THREE.Vector3();
     
-    // Forward/backward movement
-    if (forward) direction.z -= 1;
-    if (backward) direction.z += 1;
+    // Forward/backward movement (check both reactive and direct states for compatibility)
+    if (keys.forward || forward) {
+      direction.z -= 1;
+      if (keys.forward !== forward) console.log("Key state inconsistency - forward:", {reactive: forward, direct: keys.forward});
+    }
+    if (keys.backward || backward) {
+      direction.z += 1;
+      if (keys.backward !== backward) console.log("Key state inconsistency - backward:", {reactive: backward, direct: keys.backward});
+    }
     
-    // Left/right movement
-    if (leftward) direction.x -= 1;
-    if (rightward) direction.x += 1;
+    // Left/right movement (check both reactive and direct states for compatibility)
+    if (keys.leftward || leftward) {
+      direction.x -= 1;
+      if (keys.leftward !== leftward) console.log("Key state inconsistency - leftward:", {reactive: leftward, direct: keys.leftward});
+    }
+    if (keys.rightward || rightward) {
+      direction.x += 1;
+      if (keys.rightward !== rightward) console.log("Key state inconsistency - rightward:", {reactive: rightward, direct: keys.rightward});
+    }
     
     // Normalize direction if moving diagonally
     if (direction.length() > 0) {

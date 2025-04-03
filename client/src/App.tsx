@@ -1,4 +1,4 @@
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState, useEffect, Component, ErrorInfo, ReactNode } from "react";
 import { Canvas } from "@react-three/fiber";
 import { KeyboardControls } from "@react-three/drei";
 import Scene from "./components/3d/Scene";
@@ -7,6 +7,40 @@ import NavControls from "./components/ui/NavControls";
 import InfoPanel from "./components/ui/InfoPanel";
 import { useAudio } from "./lib/stores/useAudio";
 import "@fontsource/inter";
+
+// Error boundary component to catch Three.js errors
+interface ErrorBoundaryProps {
+  children: ReactNode;
+  onError: (error: Error) => void;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error: Error | null;
+}
+
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+    console.error("Canvas error caught by boundary:", error, errorInfo);
+    this.props.onError(error);
+  }
+
+  render(): ReactNode {
+    if (this.state.hasError) {
+      return null; // Render nothing, let parent component handle error display
+    }
+    return this.props.children;
+  }
+}
 
 // Define control keys for navigation
 const controls = [
@@ -26,29 +60,41 @@ function App() {
     title: string;
     content: string;
   } | null>(null);
+  const [loadingError, setLoadingError] = useState<string | null>(null);
+  const [canvasError, setCanvasError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Initialize audio elements
-    const bgMusic = new Audio("/sounds/background.mp3");
-    bgMusic.loop = true;
-    bgMusic.volume = 0.4;
+    console.log("App component mounted - initializing...");
     
-    const hitSound = new Audio("/sounds/hit.mp3");
-    hitSound.volume = 0.6;
-    
-    const successSound = new Audio("/sounds/success.mp3");
-    successSound.volume = 0.7;
-    
-    // Set up audio in store
-    useAudio.getState().setBackgroundMusic(bgMusic);
-    useAudio.getState().setHitSound(hitSound);
-    useAudio.getState().setSuccessSound(successSound);
+    try {
+      // Initialize audio elements
+      const bgMusic = new Audio("/sounds/background.mp3");
+      bgMusic.loop = true;
+      bgMusic.volume = 0.4;
+      
+      const hitSound = new Audio("/sounds/hit.mp3");
+      hitSound.volume = 0.6;
+      
+      const successSound = new Audio("/sounds/success.mp3");
+      successSound.volume = 0.7;
+      
+      // Set up audio in store
+      useAudio.getState().setBackgroundMusic(bgMusic);
+      useAudio.getState().setHitSound(hitSound);
+      useAudio.getState().setSuccessSound(successSound);
+      
+      console.log("Audio setup complete");
+    } catch (error) {
+      console.error("Error setting up audio:", error);
+      setLoadingError("Error loading audio resources");
+    }
     
     // Simulate loading time
     const timer = setTimeout(() => {
+      console.log("Loading complete, displaying 3D environment");
       setIsLoading(false);
       // User needs to interact with the page first for audio to play (browser policy)
-    }, 3000);
+    }, 4000);
     
     return () => clearTimeout(timer);
   }, []);
@@ -87,29 +133,67 @@ function App() {
 
   return (
     <div className="relative w-full h-full">
-      {isLoading ? (
-        <LoadingScreen onStart={handleStartExploring} />
+      {isLoading || canvasError ? (
+        <LoadingScreen 
+          onStart={handleStartExploring} 
+          errorMsg={canvasError || loadingError}
+        />
       ) : (
         <>
           <KeyboardControls map={controls}>
-            <Canvas
-              shadows
-              camera={{ position: [0, 2, 10], fov: 45 }}
-              gl={{ 
-                antialias: true,
-                powerPreference: "default"
-              }}
-            >
-              <color attach="background" args={["#050505"]} />
-              <fog attach="fog" args={["#050505", 10, 50]} />
-              
-              <Suspense fallback={null}>
-                <Scene 
-                  activeSection={activeSection} 
-                  onShowInfo={handleShowInfo}
-                />
-              </Suspense>
-            </Canvas>
+            <ErrorBoundary onError={(error) => {
+              console.error("Three.js render error:", error);
+              setCanvasError("Failed to render 3D environment. Please try a different browser or device.");
+            }}>
+              <Canvas
+                shadows
+                camera={{ position: [0, 2, 10], fov: 45 }}
+                gl={{ 
+                  antialias: true,
+                  powerPreference: "default",
+                  alpha: false,
+                  stencil: false,
+                  depth: true,
+                  preserveDrawingBuffer: true
+                }}
+                dpr={[1, 2]} // Control pixel ratio for better performance
+                style={{ 
+                  height: "100vh", 
+                  width: "100vw",
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  zIndex: 10 
+                }}
+                onCreated={({ gl }) => {
+                  console.log("Canvas created successfully");
+                  try {
+                    // Force the renderer to be properly initialized
+                    gl.setSize(window.innerWidth, window.innerHeight);
+                    gl.setClearColor(0x050505);
+                    
+                    // Check if WebGL contexts are valid
+                    const isContextLost = gl.getContext().isContextLost();
+                    if (isContextLost) {
+                      throw new Error("WebGL context lost");
+                    }
+                  } catch (error) {
+                    console.error("WebGL initialization error:", error);
+                    setCanvasError("Failed to initialize 3D rendering. This may be due to WebGL support issues.");
+                  }
+                }}
+              >
+                <color attach="background" args={["#050505"]} />
+                <fog attach="fog" args={["#050505", 10, 50]} />
+                
+                <Suspense fallback={null}>
+                  <Scene 
+                    activeSection={activeSection} 
+                    onShowInfo={handleShowInfo}
+                  />
+                </Suspense>
+              </Canvas>
+            </ErrorBoundary>
           </KeyboardControls>
           
           {showControls && (
