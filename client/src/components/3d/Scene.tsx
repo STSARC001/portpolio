@@ -18,6 +18,7 @@ import ProjectShowcase from "./ProjectShowcase";
 import { usePortfolio } from "@/lib/stores/usePortfolio";
 
 // Import all sections
+import Home from "@/sections/Home";
 import About from "@/sections/About";
 import Projects from "@/sections/Projects";
 import Skills from "@/sections/Skills";
@@ -127,6 +128,7 @@ export default function Scene({ activeSection, onShowInfo }: SceneProps) {
       <DevObjects activeSection={activeSection} onShowInfo={onShowInfo} />
       
       {/* All sections */}
+      <Home isActive={activeSection === "home"} onShowInfo={onShowInfo} />
       <ProjectShowcase activeSection={activeSection} onShowInfo={onShowInfo} />
       <About isActive={activeSection === "about"} onShowInfo={onShowInfo} />
       <Skills isActive={activeSection === "skills"} onShowInfo={onShowInfo} />
