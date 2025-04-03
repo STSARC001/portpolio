@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { useAudio } from "@/lib/stores/useAudio";
 
 interface LoadingScreenProps {
   onStart: () => void;
@@ -10,6 +11,7 @@ export default function LoadingScreen({ onStart, errorMsg = null }: LoadingScree
   const [progress, setProgress] = useState(0);
   const [isReady, setIsReady] = useState(false);
   const [hasAttemptedToStart, setHasAttemptedToStart] = useState(false);
+  const [soundOption, setSoundOption] = useState<"with-sound" | "no-sound">("with-sound");
   
   // Reset the loading state if we get an error
   useEffect(() => {
@@ -55,14 +57,24 @@ export default function LoadingScreen({ onStart, errorMsg = null }: LoadingScree
   }, []);
   
   const handleStart = () => {
-    console.log("Start button clicked");
+    console.log("Start button clicked with sound option:", soundOption);
     setHasAttemptedToStart(true);
+    
+    // If user chose no sound, mute audio
+    if (soundOption === "no-sound") {
+      useAudio.getState().toggleMute();
+    }
+    
     onStart();
   };
   
   const forceRestart = () => {
     console.log("Force restart requested");
     window.location.reload();
+  };
+  
+  const toggleSoundOption = () => {
+    setSoundOption(prev => prev === "with-sound" ? "no-sound" : "with-sound");
   };
 
   return (
@@ -93,7 +105,37 @@ export default function LoadingScreen({ onStart, errorMsg = null }: LoadingScree
           />
         </div>
       ) : (
-        <div className="flex flex-col items-center space-y-3">
+        <div className="flex flex-col items-center space-y-4">
+          {/* Sound toggle */}
+          <div className="flex items-center justify-center space-x-6 mb-2">
+            <button
+              onClick={toggleSoundOption}
+              className={cn(
+                "px-5 py-2 rounded-full font-medium transition-colors flex items-center space-x-2 text-sm",
+                soundOption === "with-sound" 
+                  ? "bg-cyan-600 text-white" 
+                  : "bg-gray-700 text-gray-300"
+              )}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+              <span>With Sound</span>
+            </button>
+            
+            <button
+              onClick={toggleSoundOption}
+              className={cn(
+                "px-5 py-2 rounded-full font-medium transition-colors flex items-center space-x-2 text-sm",
+                soundOption === "no-sound" 
+                  ? "bg-cyan-600 text-white" 
+                  : "bg-gray-700 text-gray-300"
+              )}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+              <span>No Sound</span>
+            </button>
+          </div>
+          
+          {/* Start button */}
           <button
             onClick={handleStart}
             className="px-8 py-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-full font-medium transition-colors flex items-center space-x-2"
@@ -102,6 +144,7 @@ export default function LoadingScreen({ onStart, errorMsg = null }: LoadingScree
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="m12 16 4-4-4-4"/><path d="M8 12h8"/></svg>
           </button>
           
+          {/* Restart button if needed */}
           {(errorMsg || hasAttemptedToStart) && (
             <button
               onClick={forceRestart}
