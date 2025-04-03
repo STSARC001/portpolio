@@ -17,19 +17,19 @@ import EnvironmentSetup from "./EnvironmentSetup";
 import ProjectShowcase from "./ProjectShowcase";
 import PhysicsProvider from "./PhysicsProvider";
 import InteractiveObject from "./InteractiveObject";
-import { usePortfolio } from "@/lib/stores/usePortfolio";
-import { useAudio } from "@/lib/stores/useAudio";
+import { usePortfolio } from "../../lib/stores/usePortfolio";
+import { useAudio } from "../../lib/stores/useAudio";
 
 // Import all sections
-import Home from "@/sections/Home";
-import About from "@/sections/About";
-import Projects from "@/sections/Projects";
-import Skills from "@/sections/Skills";
-import Contact from "@/sections/Contact";
-import Experience from "@/sections/Experience";
-import Education from "@/sections/Education";
-import Gallery from "@/sections/Gallery";
-import Blog from "@/sections/Blog";
+import Home from "../../sections/Home";
+import About from "../../sections/About";
+import Projects from "../../sections/Projects";
+import Skills from "../../sections/Skills";
+import Contact from "../../sections/Contact";
+import Experience from "../../sections/Experience";
+import Education from "../../sections/Education";
+import Gallery from "../../sections/Gallery";
+import Blog from "../../sections/Blog";
 
 interface SceneProps {
   activeSection: string;

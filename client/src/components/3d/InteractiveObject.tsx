@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { useSphere, useBox, useCylinder, usePlane } from '@react-three/cannon';
 import * as THREE from 'three';
-import { useAudio } from '@/lib/stores/useAudio';
+import { useAudio } from '../../lib/stores/useAudio';
 
 type ShapeType = 'box' | 'sphere' | 'cylinder';
 

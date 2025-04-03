@@ -62,9 +62,17 @@ function App() {
   } | null>(null);
   const [loadingError, setLoadingError] = useState<string | null>(null);
   const [canvasError, setCanvasError] = useState<string | null>(null);
+  const [debugInfo, setDebugInfo] = useState<string | null>(null);
 
   useEffect(() => {
     console.log("App component mounted - initializing...");
+    // Debug info - displayed on screen for debugging
+    window.onerror = function(message, source, lineno, colno, error) {
+      const errorInfo = `ERROR: ${message}\nSource: ${source}\nLine: ${lineno}:${colno}\n${error?.stack || "No stack trace"}`;
+      console.error(errorInfo);
+      setDebugInfo(errorInfo);
+      return true; // Prevents the browser from showing its own error dialog
+    };
     
     try {
       // Initialize audio elements
@@ -224,6 +232,13 @@ function App() {
           <div className="fixed bottom-2 left-2 text-white/50 text-xs">
             Use W,A,S,D or Arrow Keys to move • SPACE to jump • E to interact
           </div>
+          
+          {debugInfo && (
+            <div className="fixed top-0 left-0 bg-black/80 text-red-500 p-4 z-50 w-full h-64 overflow-auto text-xs whitespace-pre-wrap font-mono">
+              <h3 className="text-sm font-bold mb-2">DEBUG INFO:</h3>
+              {debugInfo}
+            </div>
+          )}
         </>
       )}
     </div>
