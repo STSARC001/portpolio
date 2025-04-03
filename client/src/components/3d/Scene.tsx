@@ -6,6 +6,7 @@ import {
   OrbitControls,
   useTexture,
   Sky,
+  Stars,
 } from "@react-three/drei";
 import * as THREE from "three";
 import { gsap } from "gsap";
@@ -15,6 +16,16 @@ import DevObjects from "./DevObjects";
 import EnvironmentSetup from "./EnvironmentSetup";
 import ProjectShowcase from "./ProjectShowcase";
 import { usePortfolio } from "@/lib/stores/usePortfolio";
+
+// Import all sections
+import About from "@/sections/About";
+import Projects from "@/sections/Projects";
+import Skills from "@/sections/Skills";
+import Contact from "@/sections/Contact";
+import Experience from "@/sections/Experience";
+import Education from "@/sections/Education";
+import Gallery from "@/sections/Gallery";
+import Blog from "@/sections/Blog";
 
 interface SceneProps {
   activeSection: string;
@@ -114,7 +125,27 @@ export default function Scene({ activeSection, onShowInfo }: SceneProps) {
       <Controls />
       <EnvironmentSetup />
       <DevObjects activeSection={activeSection} onShowInfo={onShowInfo} />
+      
+      {/* All sections */}
       <ProjectShowcase activeSection={activeSection} onShowInfo={onShowInfo} />
+      <About isActive={activeSection === "about"} onShowInfo={onShowInfo} />
+      <Skills isActive={activeSection === "skills"} onShowInfo={onShowInfo} />
+      <Contact isActive={activeSection === "contact"} onShowInfo={onShowInfo} />
+      <Experience isActive={activeSection === "experience"} onShowInfo={onShowInfo} />
+      <Education isActive={activeSection === "education"} onShowInfo={onShowInfo} />
+      <Gallery isActive={activeSection === "gallery"} onShowInfo={onShowInfo} />
+      <Blog isActive={activeSection === "blog"} onShowInfo={onShowInfo} />
+      
+      {/* Stars for enhanced 3D environment */}
+      <Stars 
+        radius={100} 
+        depth={50} 
+        count={5000} 
+        factor={4} 
+        saturation={0.5} 
+        fade 
+        speed={1}
+      />
       
       {/* Orbit Controls */}
       <OrbitControls 

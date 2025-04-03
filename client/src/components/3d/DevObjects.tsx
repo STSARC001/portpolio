@@ -1,6 +1,6 @@
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useEffect } from "react";
 import { useFrame, useLoader } from "@react-three/fiber";
-import { useGLTF, Text, MeshReflectorMaterial, useTexture } from "@react-three/drei";
+import { useGLTF, Text, useTexture } from "@react-three/drei";
 import * as THREE from "three";
 import { gsap } from "gsap";
 import { usePortfolio } from "@/lib/stores/usePortfolio";
@@ -127,17 +127,17 @@ export default function DevObjects({ activeSection, onShowInfo }: DevObjectsProp
     
     for (let i = 0; i < count; i++) {
       platforms.push({
-        position: [
+        position: new THREE.Vector3(
           (Math.random() - 0.5) * 40,
           0.05,
           (Math.random() - 0.5) * 40
-        ],
-        rotation: [0, Math.random() * Math.PI * 2, 0],
-        scale: [
+        ),
+        rotation: new THREE.Euler(0, Math.random() * Math.PI * 2, 0),
+        scale: new THREE.Vector3(
           2 + Math.random() * 3,
           0.1,
           2 + Math.random() * 3
-        ]
+        )
       });
     }
     
@@ -295,16 +295,11 @@ export default function DevObjects({ activeSection, onShowInfo }: DevObjectsProp
       {/* Central platform */}
       <mesh position={[0, -0.01, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
         <circleGeometry args={[15, 50]} />
-        <MeshReflectorMaterial
-          blur={[400, 100]}
-          resolution={1024}
-          mixBlur={1}
-          mixStrength={15}
-          depthScale={1}
-          minDepthThreshold={0.85}
+        <meshStandardMaterial
           color="#151515"
           metalness={0.6}
-          roughness={1}
+          roughness={0.3}
+          envMapIntensity={0.5}
         />
       </mesh>
     </group>

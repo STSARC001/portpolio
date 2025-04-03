@@ -1,5 +1,6 @@
 import { useTexture } from "@react-three/drei";
 import * as THREE from "three";
+import { useMemo } from "react";
 
 export default function EnvironmentSetup() {
   // Sky texture
@@ -22,7 +23,7 @@ export default function EnvironmentSetup() {
       const z = radius * Math.cos(phi);
       
       positions.push({ 
-        position: [x, y, z],
+        position: new THREE.Vector3(x, y, z),
         scale: 0.05 + Math.random() * 0.15
       });
     }
@@ -40,23 +41,30 @@ export default function EnvironmentSetup() {
         </mesh>
       ))}
       
-      {/* Ambient light particles */}
-      {Array.from({ length: 20 }).map((_, i) => {
-        const x = (Math.random() - 0.5) * 30;
-        const y = 0.5 + Math.random() * 3;
-        const z = (Math.random() - 0.5) * 30;
-        const scale = 0.2 + Math.random() * 0.3;
+      {/* Ambient light particles - pre-calculated positions */}
+      {useMemo(() => {
+        const particles = [];
+        const count = 20;
         
-        return (
-          <mesh 
-            key={`light-particle-${i}`} 
-            position={[x, y, z]}
-          >
-            <sphereGeometry args={[scale, 8, 8]} />
-            <meshBasicMaterial color={["#44aaff", "#aaddff"][i % 2]} transparent opacity={0.3} />
-          </mesh>
-        );
-      })}
+        for (let i = 0; i < count; i++) {
+          const x = (Math.random() - 0.5) * 30;
+          const y = 0.5 + Math.random() * 3;
+          const z = (Math.random() - 0.5) * 30;
+          const scale = 0.2 + Math.random() * 0.3;
+          
+          particles.push(
+            <mesh 
+              key={`light-particle-${i}`} 
+              position={new THREE.Vector3(x, y, z)}
+            >
+              <sphereGeometry args={[scale, 8, 8]} />
+              <meshBasicMaterial color={["#44aaff", "#aaddff"][i % 2]} transparent opacity={0.3} />
+            </mesh>
+          );
+        }
+        
+        return particles;
+      }, [])}
       
       {/* Developer-themed decorative elements */}
       <group position={[-15, 0, -15]}>
@@ -87,25 +95,32 @@ export default function EnvironmentSetup() {
         />
       </mesh>
       
-      {/* Glowing grid lines */}
-      {Array.from({ length: 10 }).map((_, i) => {
-        const pos = -22.5 + i * 5;
-        return (
-          <group key={`grid-${i}`}>
-            {/* Horizontal lines */}
-            <mesh position={[0, 0.02, pos]} rotation={[-Math.PI / 2, 0, 0]}>
-              <planeGeometry args={[50, 0.05]} />
-              <meshBasicMaterial color="#44aaff" opacity={0.3} transparent />
-            </mesh>
-            
-            {/* Vertical lines */}
-            <mesh position={[pos, 0.02, 0]} rotation={[-Math.PI / 2, 0, Math.PI / 2]}>
-              <planeGeometry args={[50, 0.05]} />
-              <meshBasicMaterial color="#44aaff" opacity={0.3} transparent />
-            </mesh>
-          </group>
-        );
-      })}
+      {/* Glowing grid lines - pre-calculated */}
+      {useMemo(() => {
+        const gridLines = [];
+        const count = 10;
+        
+        for (let i = 0; i < count; i++) {
+          const pos = -22.5 + i * 5;
+          gridLines.push(
+            <group key={`grid-${i}`}>
+              {/* Horizontal lines */}
+              <mesh position={new THREE.Vector3(0, 0.02, pos)} rotation={[-Math.PI / 2, 0, 0]}>
+                <planeGeometry args={[50, 0.05]} />
+                <meshBasicMaterial color="#44aaff" opacity={0.3} transparent />
+              </mesh>
+              
+              {/* Vertical lines */}
+              <mesh position={new THREE.Vector3(pos, 0.02, 0)} rotation={[-Math.PI / 2, 0, Math.PI / 2]}>
+                <planeGeometry args={[50, 0.05]} />
+                <meshBasicMaterial color="#44aaff" opacity={0.3} transparent />
+              </mesh>
+            </group>
+          );
+        }
+        
+        return gridLines;
+      }, [])}
     </group>
   );
 }
